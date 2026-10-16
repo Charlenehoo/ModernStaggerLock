@@ -130,16 +130,56 @@ target_precompile_headers(
     src/PCH.h
 )
 
-# post build event
-add_custom_command(
-    TARGET
-    ${PROJECT_NAME}
-    POST_BUILD
-    COMMAND
-    powershell -NoProfile -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "COPY" "${PROJECT_VERSION}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(ConfigurationName)" "${PROJECT_NAME}" "${ANNIVERSARY_EDITION}"
-    COMMENT
-    "Updating project :))"
-)
+# ─────── MO2 auto-deploy ───────
+if(DEFINED ENV{MO2})
+    if(ENABLE_SKYRIM_AE)
+        set(MO2_MOD_NAME "${PROJECT_NAME}_AE")
+    else()
+        set(MO2_MOD_NAME "${PROJECT_NAME}_SE")
+    endif()
+
+    set(MO2_MOD_DIR "$ENV{MO2}/mods/${MO2_MOD_NAME}")
+    set(MO2_PLUGIN_DIR "${MO2_MOD_DIR}/SKSE/Plugins")
+
+    # ---- DLL + PDB ----
+    add_custom_command(
+        TARGET "${PROJECT_NAME}" POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${MO2_PLUGIN_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<TARGET_FILE:${PROJECT_NAME}>"
+        "${MO2_PLUGIN_DIR}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<TARGET_PDB_FILE:${PROJECT_NAME}>"
+        "${MO2_PLUGIN_DIR}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
+        COMMENT "Deploying ${PROJECT_NAME} to MO2: ${MO2_MOD_DIR}"
+    )
+
+    # ---- ini ----
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ModernStaggerLock.ini")
+        add_custom_command(
+            TARGET "${PROJECT_NAME}" POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/ModernStaggerLock.ini"
+            "${MO2_PLUGIN_DIR}/ModernStaggerLock.ini"
+            COMMENT "Copying ModernStaggerLock.ini to MO2"
+        )
+    endif()
+
+    # ---- config folder ----
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ModernStaggerLock")
+        add_custom_command(
+            TARGET "${PROJECT_NAME}" POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/ModernStaggerLock"
+            "${MO2_PLUGIN_DIR}/ModernStaggerLock"
+            COMMENT "Syncing ModernStaggerLock/ to MO2"
+        )
+    endif()
+
+    message(STATUS "MO2 detected. Mod dir: ${MO2_MOD_DIR}")
+else()
+    message(STATUS "MO2 env var not found. Skipping auto-copy.")
+endif()
 
 # called via !Rebuild.ps1
 if(DEFINED GROUP)
