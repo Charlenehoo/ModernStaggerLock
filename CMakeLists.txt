@@ -51,8 +51,8 @@ source_group(
 )
 
 # dependencies
-add_subdirectory($ENV{CommonLibSSEPath} CommonLibSSE)
-add_subdirectory($ENV{DKUtilPath} DKUtil)
+add_subdirectory(extern/CommonLibSSE-NG CommonLibSSE)
+add_subdirectory(extern/DKUtil DKUtil)
 find_package(spdlog CONFIG REQUIRED)
 
 # cmake target
