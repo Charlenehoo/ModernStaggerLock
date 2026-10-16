@@ -1,0 +1,23 @@
+# build tree
+build/
+out/
+
+# cmake in-source leftovers
+CMakeCache.txt
+CMakeFiles/
+CMakeUserPresets.json
+
+# vcpkg manifest mode
+vcpkg_installed/
+vcpkg-manifest-install.log
+vcpkg_installed/vcpkg/status
+
+# visual studio
+.vs/
+*.user
+
+# binaries
+*.dll
+*.pdb
+*.lib
+*.exp
