@@ -96,7 +96,6 @@ if(MSVC)
         ${PROJECT_NAME}
         PRIVATE
         /MP
-        /await
         /W0
         /WX
         /permissive-
@@ -148,9 +147,6 @@ if(DEFINED ENV{MO2})
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$<TARGET_FILE:${PROJECT_NAME}>"
         "${MO2_PLUGIN_DIR}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "$<TARGET_PDB_FILE:${PROJECT_NAME}>"
-        "${MO2_PLUGIN_DIR}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
         COMMENT "Deploying ${PROJECT_NAME} to MO2: ${MO2_MOD_DIR}"
     )
 
