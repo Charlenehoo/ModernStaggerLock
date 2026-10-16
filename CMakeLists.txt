@@ -36,8 +36,11 @@ configure_file(
 )
 
 # source files
-execute_process(COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "SOURCEGEN" "${PROJECT_VERSION}" "${CMAKE_CURRENT_BINARY_DIR}")
-include(${CMAKE_CURRENT_BINARY_DIR}/sourcelist.cmake)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
+)
 source_group(
     TREE
     ${CMAKE_CURRENT_SOURCE_DIR}
