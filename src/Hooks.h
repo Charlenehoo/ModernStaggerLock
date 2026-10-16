@@ -147,11 +147,12 @@ namespace ModernStaggerLock
 	public:
 		static void InstallHook()
 		{
-			SKSE::AllocTrampoline(1 << 4);
+			SKSE::AllocTrampoline(1 << 9);
 			auto& trampoline = SKSE::GetTrampoline();
 
-			REL::Relocation<std::uintptr_t> callerFunc{ REL::ID(36507) };  //1.5.97 1405E4880
-			_PerformAction = trampoline.write_call<5>(callerFunc.address() + 0X89D, PerformLandAction);
+			REL::Relocation<std::uintptr_t> callerFunc{ RELOCATION_ID(36507, 37507) };  // 1.5.97: 1405E4880 (+0x89D), 1.7.104.0: 140689370 (+0x9BB)
+			const auto callOffset = REL::Module::IsAE() ? 0x9BB : 0x89D;
+			_PerformAction = trampoline.write_call<5>(callerFunc.address() + callOffset, PerformLandAction);
 			INFO("{} Done!", __FUNCTION__);
 		}
 
@@ -166,11 +167,11 @@ namespace ModernStaggerLock
 	public:
 		static void InstallHook()
 		{
-			SKSE::AllocTrampoline(1 << 4);
 			auto& trampoline = SKSE::GetTrampoline();
 
-			REL::Relocation<std::uintptr_t> callerFunc{ REL::ID(41271) };  //1.5.97 140705530
-			_PerformAction = trampoline.write_call<5>(callerFunc.address() + 0x241, PerformLandAction);
+			REL::Relocation<std::uintptr_t> callerFunc{ RELOCATION_ID(41271, 42350) };  // 1.5.97: 140705530 (+0x241), 1.7.104.0: 1407AE440 (+0x22E)
+			const auto callOffset = REL::Module::IsAE() ? 0x22E : 0x241;
+			_PerformAction = trampoline.write_call<5>(callerFunc.address() + callOffset, PerformLandAction);
 			INFO("{} Done!", __FUNCTION__);
 		}
 
