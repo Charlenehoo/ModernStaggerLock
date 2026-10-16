@@ -22,7 +22,7 @@ namespace ModernStaggerLock
 		PrintSettingValue(LargeStaggerMagnitude);
 		PrintSettingValue(LargestStaggerMagnitude);
 
-		auto MSLFilesName = DKUtil::Config::GetAllFiles<false>("Data\\SKSE\\Plugins\\ModernStaggerLock"sv, ".json"sv, {}, "_MSL"sv);
+		auto MSLFilesName = DKUtil::Config::GetAllFiles("Data\\SKSE\\Plugins\\ModernStaggerLock"sv, ".json"sv, {}, "_MSL"sv);
 		auto SpecialStaggerHandler = SpecialStaggerHandler::GetSingleton();
 		for (const auto& fileName : MSLFilesName) {
 			try {
