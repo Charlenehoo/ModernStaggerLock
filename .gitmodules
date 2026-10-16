@@ -1,6 +1,3 @@
-[submodule "Stagger_Lock_Behaviour"]
-	path = Stagger_Lock_Behaviour
-	url = https://github.com/max-su-2019/Stagger_Lock_Behaviour
 [submodule "extern/DKUtil"]
 	path = extern/DKUtil
 	url = https://github.com/Doodlum/DKUtil.git
@@ -8,3 +5,6 @@
 	path = extern/CommonLibSSE-NG
 	url = https://github.com/alandtse/CommonLibSSE-NG.git
 	branch = ng
+[submodule "extern/Stagger_Lock_Behaviour"]
+	path = extern/Stagger_Lock_Behaviour
+	url = https://github.com/max-su-2019/Stagger_Lock_Behaviour
